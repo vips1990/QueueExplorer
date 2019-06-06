@@ -46,7 +46,8 @@ namespace QueueExplorer
             }
 
             else { 
-            // Loop through the messages.
+            
+                // Read all messages from source queue
                 foreach (Message msg in msgs)
                 {
                     // Display the label of each message.
@@ -67,9 +68,9 @@ namespace QueueExplorer
 
             }
 
-            Console.WriteLine("Total number of messages in poison queue are-" + msgs.Length);
-            Console.ReadKey();
 
+            Console.WriteLine("Total number of messages in source queue are-" + msgs.Length);
+            
         }
 
         static void moveMessages()
@@ -77,6 +78,7 @@ namespace QueueExplorer
 
             try { 
 
+                
                 System.Console.WriteLine("      sourceQueue: " + sourceQueue.GetAllMessages().Count().ToString());
                 System.Console.WriteLine("      destinationQueue: " + destinationQueue.GetAllMessages().Count().ToString());
                 System.Console.WriteLine("      localQueue: " + localQueue.GetAllMessages().Count().ToString());
@@ -84,6 +86,7 @@ namespace QueueExplorer
 
                 System.Console.WriteLine(string.Format("Do you want to move {0} msg from  source queue to destination queue?Yes/No \n", sourceQueue.GetAllMessages().Count().ToString()));
 
+                // move all messages from source queue to destination queue
                 if (System.Console.ReadLine().ToLower() == "yes")
                 {
                     //var scope = new TransactionScope(TransactionScopeOption.Required);
@@ -99,6 +102,7 @@ namespace QueueExplorer
                     Console.WriteLine("Messages moved..");
                     Console.WriteLine("Do you want to purgue the source queue? Yes/No \n");
 
+                    // purge the messages in source queue
                     if (System.Console.ReadLine().ToLower() == "yes")
                     {
 
@@ -107,6 +111,7 @@ namespace QueueExplorer
 
                     }
 
+                    
                     System.Console.WriteLine("");
                     System.Console.WriteLine("      Message after poison purge: ");
                     System.Console.WriteLine("      SourceQueue: " + sourceQueue.GetAllMessages().Count().ToString());
