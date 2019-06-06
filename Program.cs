@@ -13,21 +13,16 @@ namespace QueueExplorer
     [Serializable]
     class Program
     {
-        private static MessageQueue sourceQueue, destinationQueue, localQueue;
-        private string machine, machineIp, queueName, queueGUID, queuePath, queuePathIp;
+        private static string machine = ConfigurationManager.AppSettings["MSMQMachineName"];
+        private static string machineIp = ConfigurationManager.AppSettings["MSMQMachineName_IP"];
+        private static string queueName = ConfigurationManager.AppSettings["QueueName"];
+        private static string queueGUID = ConfigurationManager.AppSettings["QueueID"];
+        private static string queuePath = machine + "\\" + queueName;
+        private static string queuePathIp = machineIp + "\\" + queueName;
+        private static MessageQueue sourceQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:{0}", queuePathIp + ";poison"), false);
+        private static MessageQueue destinationQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:{0}", queuePathIp + ";retry"), false);
+        private static MessageQueue localQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:10.1.51.7\\bomireceiver"), false);
 
-        public Program()
-        {
-            machine = ConfigurationManager.AppSettings["MSMQMachineName"];
-            machineIp = ConfigurationManager.AppSettings["MSMQMachineName_IP"];
-            queueName = ConfigurationManager.AppSettings["QueueName"];
-            queueGUID = ConfigurationManager.AppSettings["QueueID"];
-            queuePath = machine + "\\" + queueName;
-            queuePathIp = machineIp + "\\" + queueName;
-            sourceQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:{0}", queuePathIp + ";poison"), false);
-            destinationQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:{0}", queuePathIp + ";retry", false));
-            localQueue = new MessageQueue(string.Format("FormatName:DIRECT=TCP:10.1.51.7\\bomireceiver"), false);
-        }
         static void Main(string[] args)
         {
             // count number of messages in the queue and display message body
